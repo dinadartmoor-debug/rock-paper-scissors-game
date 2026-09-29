@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Rock Paper Scissors</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial;
+      margin-top: 50px;
+      background-color: #f0f0f0;
+    }
+    
+    h1 {
+      color: #333;
+    }
+    
+    .buttons {
+      margin: 30px 0;
+    }
+    
+    button {
+      padding: 15px 30px;
+      font-size: 18px;
+      margin: 10px;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    
+    button:hover {
+      background-color: #45a049;
+    }
+    
+    button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    
+    #result {
+      font-size: 20px;
+      margin-top: 30px;
+      padding: 20px;
+      background-color: white;
+      border-radius: 5px;
+      min-height: 100px;
+    }
+    
+    #score {
+      font-size: 18px;
+      color: blue;
+      margin-top: 20px;
+    }
+    
+    #finalWinner {
+      font-size: 28px;
+      color: green;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎮 Rock Paper Scissors - Best of 5</h1>
+  
+  <p>Round: <span id="roundNumber">1</span> / 5</p>
+  
+  <div class="buttons">
+    <button id="rockBtn" onclick="playGame('Rock')">🪨 Rock</button>
+    <button id="paperBtn" onclick="playGame('Paper')">📄 Paper</button>
+    <button id="scissorsBtn" onclick="playGame('Scissors')">✂️ Scissors</button>
+  </div>
+  
+  <div id="result"></div>
+  <div id="score"></div>
+  <div id="finalWinner"></div>
+  
+  <button id="resetBtn" onclick="resetGame()" style="display:none; margin: 20px auto; background-color: #008CBA;">Play Again</button>
+  
+  <script>
+    const choices = ["Rock", "Paper", "Scissors"];
+    let round = 1;
+    let userWins = 0;
+    let computerWins = 0;
+
+    function playGame(userChoice) {
+        const computerChoice = choices[Math.floor(Math.random() * choices.length)];
+        let result = "";
+
+        if (userChoice === computerChoice) {
+            result = "It's a tie!";
+        } else if (
+            (userChoice === "Rock" && computerChoice === "Scissors") ||
+            (userChoice === "Paper" && computerChoice === "Rock") ||
+            (userChoice === "Scissors" && computerChoice === "Paper")
+        ) {
+            result = "You win this round!";
+            userWins++;
+        } else {
+            result = "Computer wins this round!";
+            computerWins++;
+        }
+
+        // Show result
+        document.getElementById("result").textContent = 
+          `Round ${round}: You chose ${userChoice}. Computer chose ${computerChoice}. ${result}`;
+        
+        // Show current score
+        document.getElementById("score").textContent = 
+          `Score: You ${userWins} - Computer ${computerWins}`;
+        
+        round++;
+
+        // Check if game is over (5 rounds completed)
+        if (round > 5) {
+            endGame();
+        } else {
+            document.getElementById("roundNumber").textContent = round;
+        }
+    }
+
+    function endGame() {
+        // Disable buttons
+        document.getElementById("rockBtn").disabled = true;
+        document.getElementById("paperBtn").disabled = true;
+        document.getElementById("scissorsBtn").disabled = true;
+        
+        // Show final winner
+        let finalResult = "";
+        if (userWins > computerWins) {
+            finalResult = "🎉 YOU WIN THE GAME! 🎉";
+        } else if (computerWins > userWins) {
+            finalResult = "💻 COMPUTER WINS! 💻";
+        } else {
+            finalResult = "🤝 IT'S A TIE! 🤝";
+        }
+        
+        document.getElementById("finalWinner").textContent = finalResult;
+        
+        // Show reset button
+        document.getElementById("resetBtn").style.display = "block";
+    }
+
+    function resetGame() {
+        round = 1;
+        userWins = 0;
+        computerWins = 0;
+        
+        document.getElementById("result").textContent = "";
+        document.getElementById("score").textContent = "";
+        document.getElementById("finalWinner").textContent = "";
+        document.getElementById("roundNumber").textContent = "1";
+        
+        // Enable buttons
+        document.getElementById("rockBtn").disabled = false;
+        document.getElementById("paperBtn").disabled = false;
+        document.getElementById("scissorsBtn").disabled = false;
+        
+        // Hide reset button
+        document.getElementById("resetBtn").style.display = "none";
+    }
+  </script>
+</body>
+</html>
